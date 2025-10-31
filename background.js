@@ -7,6 +7,12 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'decode') {
+    decodeGzip(request.text);
+  }
+});
+
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === "gzipDecode") {
     let selectedText = info.selectionText;
@@ -56,7 +62,13 @@ async function decodeGzip(text) {
       )
     );
     
-    const decompressedData = await decompressedStream.text();
+    let decompressedData = await decompressedStream.text();
+    
+    try {
+      const jsonData = JSON.parse(decompressedData);
+      decompressedData = JSON.stringify(jsonData, null, 2);
+    } catch (e) {
+    }
     
     chrome.storage.local.set({
       decodedText: decompressedData,

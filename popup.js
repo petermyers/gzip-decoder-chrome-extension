@@ -1,12 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
   loadStoredData();
   document.getElementById('clearBtn').addEventListener('click', clearData);
+  document.getElementById('decodeBtn').addEventListener('click', decodeInput);
   chrome.storage.onChanged.addListener((changes, namespace) => {
     if (namespace === 'local' && (changes.decodedText || changes.status)) {
       loadStoredData();
     }
   });
 });
+
+function decodeInput() {
+  const input = document.getElementById('input');
+  let text = input.value.trim();
+  
+  if (!text) {
+    return;
+  }
+  
+  if (text.startsWith("COMPRESSED")) {
+    text = text.substring("COMPRESSED".length);
+  }
+  
+  chrome.runtime.sendMessage({ action: 'decode', text: text });
+  input.value = '';
+}
 
 function loadStoredData() {
   chrome.storage.local.get(['decodedText', 'status', 'error', 'timestamp'], (result) => {

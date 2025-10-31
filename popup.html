@@ -96,6 +96,24 @@
       color: #6c757d;
       margin-bottom: 12px;
     }
+
+    #input {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      resize: vertical;
+      box-sizing: border-box;
+      margin-bottom: 8px;
+    }
+
+    #input:focus {
+      outline: none;
+      border-color: #007bff;
+    }
   </style>
 </head>
 <body>
@@ -105,7 +123,11 @@
   <div id="timestamp"></div>
   <div id="output"></div>
   
-  <button id="clearBtn">Clear</button>
+  <textarea id="input" placeholder="Paste gzip-encoded text here..."></textarea>
+  <div style="display: flex; gap: 8px; margin-top: 8px;">
+    <button id="decodeBtn">Decode</button>
+    <button id="clearBtn">Clear</button>
+  </div>
 
   <script src="popup.js"></script>
 </body>
